@@ -1,42 +1,34 @@
 package com.lms.api.config;
 
+import com.lms.api.services.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig  {
-
-
-
+public class WebSecurityConfig {
     @Autowired
-    private UserDetailsService jwtUserDetailsService;
-
+    private JwtFilter jwtFilter;
     @Autowired
-    private JwtRequestFilter jwtRequestFilter;
+    private JwtUserDetailsService jwtUserDetailsService;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-//    @Autowired
-//    @Bean
     public AuthenticationProvider userDetailsAuthProvider(){
         DaoAuthenticationProvider a = new DaoAuthenticationProvider();
         a.setUserDetailsService(jwtUserDetailsService);
@@ -47,12 +39,12 @@ public class WebSecurityConfig  {
     public AuthenticationManager authenticationManager( ) throws Exception {
         return new ProviderManager(userDetailsAuthProvider());
     }
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        System.out.println(http.authorizeRequests().requestMatchers("/user").hasRole("USER"));
-        http.csrf().disable().authorizeHttpRequests().requestMatchers("/authenticate","/register").permitAll();
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
 
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable().authorizeHttpRequests().requestMatchers(HttpMethod.POST,"/api/v1/register","/api/v1/login").permitAll();
+        // Adding our jwt filter before the username password filter
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 }

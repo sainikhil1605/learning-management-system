@@ -6,21 +6,21 @@ import lombok.*;
 @Entity
 @Table(name="user")
 @AllArgsConstructor
-@ToString
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
+@Builder
 public class DAOUser {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private long id;
     @Column
-    private String username;
+    private String email;
     @Column
     private String password;
     @Column
     private String roles;
-
+    @Column
+    private boolean shouldResetPassword;
 
 }

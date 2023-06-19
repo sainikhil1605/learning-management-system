@@ -1,19 +1,11 @@
 package com.lms.api.models;
 
-import java.io.Serial;
-import java.io.Serializable;
+import lombok.*;
 
-public class JwtResponse implements Serializable {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 
-    @Serial
-    private static final long serialVersionUID = -8091879091924046844L;
-    private final String jwtToken;
-
-    public JwtResponse(String jwtToken) {
-        this.jwtToken = jwtToken;
-    }
-
-    public String getToken() {
-        return this.jwtToken;
-    }
+public class JwtResponse {
+    private String token;
 }

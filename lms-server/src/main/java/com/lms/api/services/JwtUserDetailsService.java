@@ -1,39 +1,35 @@
 package com.lms.api.services;
 
-import java.util.ArrayList;
-
 import com.lms.api.models.DAOUser;
+import com.lms.api.models.JwtResponse;
 import com.lms.api.models.UserDTO;
-
 import com.lms.api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
-
     @Autowired
-    private UserRepository userDao;
+    private UserRepository userRepository;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
+    public UserDTO loadUserByUsername(String username){
+        DAOUser user = userRepository.findByEmail(username);
+        return UserDTO.builder().email(user.getEmail()).password(user.getPassword()).roles(user.getRoles()).shouldResetPassword(user.isShouldResetPassword()).build();
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if ("javainuse".equals(username)) {
-            return new User("javainuse", "$2a$10$slYQmyNdGzTn7ZLBXBChFOC9f6kFjAqPhccnP6DxlWXx2lPk1C3G6",
-                    new ArrayList<>());
-        } else {
-            throw new UsernameNotFoundException("User not found with username: " + username);
-        }
     }
-    public DAOUser save(UserDTO user) {
-        DAOUser newUser = new DAOUser();
-        newUser.setUsername(user.getUsername());
-        newUser.setPassword(user.getPassword());
-        return userDao.save(newUser);
+    public UserDTO save(UserDTO userDTO){
+        DAOUser newUser = DAOUser.builder().email(userDTO.getEmail()).password(new BCryptPasswordEncoder().encode(userDTO.getPassword())).roles(userDTO.getRoles()).shouldResetPassword(userDTO.isShouldResetPassword()).build();
+        DAOUser user = userRepository.save(newUser);
+        return UserDTO.builder().email(user.getEmail()).password(user.getPassword()).roles(user.getRoles()).shouldResetPassword(user.isShouldResetPassword()).build();
     }
+
 }
