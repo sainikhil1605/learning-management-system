@@ -27,8 +27,8 @@ public class AdminController {
     }
     @GetMapping()
     public  ResponseEntity<?> getAllAdmins(@RequestParam(defaultValue = "0") int page,
-                                           @RequestParam(defaultValue = "3") int size,
-                                           @RequestParam(defaultValue = "id,desc") String[] sort){
+                                           @RequestParam(defaultValue = "10") int size,
+                                           @RequestParam(defaultValue = "adminId,asc") String[] sort){
         try {
             return ResponseEntity.ok(adminService.getAllAdmins(page,size,sort));
         }catch (Exception e){

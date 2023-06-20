@@ -16,26 +16,42 @@ import {
 } from './login.styles';
 import { AccountBox, HttpsSharp } from '@mui/icons-material';
 import * as Yup from 'yup';
+import { apiPostCall } from '../../utils/apiUtils';
+import { useState } from 'react';
+import jwtDecode from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 const Login = () => {
+  const [loginError, setLoginError] = useState(false);
+  const navigate = useNavigate();
   const { handleSubmit, handleChange, values, errors, touched } = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
     onSubmit: (values) => {
-      console.log(values);
+      const loginUser = async () => {
+        try {
+          const response = await apiPostCall('/login', values);
+          const token = response.data.token;
+          localStorage.setItem('token', token);
+          const { sub } = jwtDecode(token);
+          localStorage.setItem('userEmail', sub);
+          navigate('/dashboard');
+        } catch (err) {
+          // console.log('error');
+          setLoginError(err.response.data);
+        }
+      };
+      loginUser();
     },
     validationSchema: Yup.object({
-      email: Yup.string()
-
-        .email('Invalid email address')
-        .required('Required'),
+      email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string()
         .min(8, 'Must be 8 characters or more')
         .required('Required'),
     }),
   });
-  console.log();
+
   return (
     <LoginContainer>
       <ImageContainer>
@@ -95,6 +111,11 @@ const Login = () => {
             <Button variant="contained" type="submit">
               Login
             </Button>
+            {loginError && (
+              <Typography variant="body1" color="error">
+                {loginError}
+              </Typography>
+            )}
           </FormContainer>
         </form>
       </RightContainer>

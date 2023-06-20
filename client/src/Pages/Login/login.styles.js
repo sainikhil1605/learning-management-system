@@ -39,10 +39,15 @@ const RightContainer = styled.div`
   justify-items: center;
   //   flex-direction: column;
 `;
+const TextFieldContainer = styled.div`
+  padding: 10px;
+  margin: 10px;
+`;
 export {
   LoginContainer,
   LoginFieldContainer,
   FormContainer,
   RightContainer,
   ImageContainer,
+  TextFieldContainer,
 };
