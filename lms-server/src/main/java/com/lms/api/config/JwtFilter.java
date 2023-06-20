@@ -1,5 +1,6 @@
 package com.lms.api.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lms.api.models.UserDTO;
 import com.lms.api.services.JwtUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -8,6 +9,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -41,18 +44,29 @@ public class JwtFilter extends OncePerRequestFilter {
              username=jwtTokenUtil.getUsernameFromToken(jwt);
 
              }catch (IllegalArgumentException e) {
+             response.setStatus(403);
+             response.getOutputStream().write("Unable to get JWT Token".getBytes());
                 System.out.println("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
-                System.out.println("JWT Token has expired");
+                response.setStatus(403);
+                response.getOutputStream().write("JWT token is expired".getBytes());
             }
         }else{
+//            response.resetBuffer();
+//            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+//            response.getOutputStream().print(new ObjectMapper().writeValueAsString("JWT Token does not begin with Bearer String"));
+//            response.flushBuffer();
             System.out.println("JWT Token does not begin with Bearer String");
+             response.setStatus(422);
+            response.getOutputStream().write("JWT Token does not begin with Bearer String".getBytes());
+            return ;
         }
 
         // Validating Token
         if(jwtTokenUtil.validateToken(jwt,username)){
             UserDTO userDTO= jwtUserDetailsService.loadUserByUsername(username);
-
+            System.out.print(userDTO);
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                     userDTO, null, userDTO.getAuthorities());
             usernamePasswordAuthenticationToken
@@ -69,7 +83,8 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     public boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-        return path.equals("/api/v1/register") || path.equals("/api/v1/login");
+        return path.equals("/api/v1/register") || path.equals("/api/v1/login")||path.equals("/swagger-ui")||path.equals("/swagger-ui/index.html")||path.matches("/swagger-ui/.*")||path.matches(
+                "/swagger-ui/");
 
     }
 

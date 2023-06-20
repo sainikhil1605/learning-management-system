@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin("http://localhost:3000")
 public class UserController {
 
     @Autowired
@@ -25,10 +26,15 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @PostMapping("/register")
-    public ResponseEntity<JwtResponse> register(@RequestBody UserDTO userDTO){
-        UserDTO user= jwtUserDetailsService.save(userDTO);
+    public ResponseEntity<?> register(@RequestBody UserDTO userDTO){
+        try {
+            UserDTO user = jwtUserDetailsService.save(userDTO);
 
-        return ResponseEntity.ok(jwtTokenUtil.getToken(user));
+            return ResponseEntity.ok(jwtTokenUtil.getToken(user));
+        }catch (Exception e){
+            System.out.println(e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserDTO userDTO){
@@ -38,7 +44,6 @@ public class UserController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDTO principal= (UserDTO) authentication.getPrincipal();
             return ResponseEntity.ok(jwtTokenUtil.getToken(principal));
-
         }catch (Exception e){
             System.out.println(e);
             return ResponseEntity.badRequest().body("Invalid Credentials");
