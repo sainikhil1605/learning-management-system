@@ -90,14 +90,16 @@ const Dashboard = () => {
     const getData = async () => {
       const response = await apiGetCall('/admin');
       // response.data.email = response?.data.adminUserId?.email;
-      const re = response.data.map((item) => {
+      const re = response?.data?.map((item) => {
         item.email = item.adminUserId.email;
         const recItem = _.omit(item, ['adminUserId']);
         return recItem;
       });
       setRows(re);
     };
-    getData();
+    if (pageId === 'admin-management') {
+      getData();
+    }
   }, []);
   const toggleDrawer = (open) => (event) => {
     if (
@@ -189,7 +191,7 @@ const Dashboard = () => {
               <CustomTable
                 headCells={headCells}
                 rows={rows}
-                unqiueId="adminId"
+                uniqueId="adminId"
               />
             )}
           </DashboardTile>

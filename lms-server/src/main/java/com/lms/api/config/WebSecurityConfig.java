@@ -42,7 +42,7 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable().authorizeHttpRequests().requestMatchers(HttpMethod.POST,"/api/v1/register","/api/v1/login").permitAll().requestMatchers(HttpMethod.GET,"/swagger-ui/*","/swagger-ui/index.html").permitAll().requestMatchers(HttpMethod.POST,"/api/v1/admin/**").permitAll().requestMatchers(HttpMethod.GET,"/api/v1/admin/**").permitAll();
+        http.cors().and().csrf().disable().authorizeHttpRequests().requestMatchers(HttpMethod.POST,"/register","/login").permitAll().requestMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll().requestMatchers(HttpMethod.POST,"/admin/**").permitAll().requestMatchers(HttpMethod.GET,"/admin/**").permitAll();
         // Adding our jwt filter before the username password filter
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

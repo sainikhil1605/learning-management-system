@@ -1,20 +1,15 @@
 package com.lms.api.config;
 
 
-import com.lms.api.models.DAOUser;
 import com.lms.api.models.JwtResponse;
-import com.lms.api.models.UserDTO;
-import io.jsonwebtoken.Claims;
+import com.lms.api.models.user.UserDTO;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;

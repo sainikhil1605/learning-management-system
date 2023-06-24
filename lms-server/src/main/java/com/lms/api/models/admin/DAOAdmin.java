@@ -1,8 +1,8 @@
-package com.lms.api.models;
+package com.lms.api.models.admin;
 
 
+import com.lms.api.models.user.DAOUser;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

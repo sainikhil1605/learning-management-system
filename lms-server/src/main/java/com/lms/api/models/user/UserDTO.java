@@ -1,4 +1,4 @@
-package com.lms.api.models;
+package com.lms.api.models.user;
 
 
 import lombok.Builder;

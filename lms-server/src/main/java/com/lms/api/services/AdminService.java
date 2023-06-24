@@ -1,9 +1,8 @@
 package com.lms.api.services;
 
-import com.lms.api.models.AdminDTO;
-import com.lms.api.models.DAOAdmin;
-import com.lms.api.models.DAOUser;
-import com.lms.api.models.UserDTO;
+import com.lms.api.models.admin.AdminDTO;
+import com.lms.api.models.admin.DAOAdmin;
+import com.lms.api.models.user.DAOUser;
 import com.lms.api.repositories.AdminRepository;
 import com.lms.api.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +10,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 @Service

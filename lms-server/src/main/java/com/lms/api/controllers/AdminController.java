@@ -1,17 +1,13 @@
 package com.lms.api.controllers;
 
-import com.lms.api.models.AdminDTO;
-import com.lms.api.models.DAOAdmin;
+import com.lms.api.models.admin.AdminDTO;
 import com.lms.api.services.AdminService;
-import jakarta.persistence.GeneratedValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/admin")
+@RequestMapping("/admin")
 @CrossOrigin("http://localhost:3000")
 public class AdminController {
     @Autowired
@@ -19,6 +15,7 @@ public class AdminController {
     @PostMapping()
 //    @EnableMethodSecurity(prePostEnabled = true)
     public ResponseEntity<?> createAdmin(@RequestBody  AdminDTO adminDTO){
+        System.out.println(adminDTO);
         try {
             return  ResponseEntity.ok(adminService.save(adminDTO)) ;
             }catch (Exception e) {

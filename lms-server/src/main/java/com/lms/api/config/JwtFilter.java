@@ -1,7 +1,6 @@
 package com.lms.api.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lms.api.models.UserDTO;
+import com.lms.api.models.user.UserDTO;
 import com.lms.api.services.JwtUserDetailsService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -9,8 +8,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -83,8 +80,9 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     public boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-        return path.equals("/api/v1/register") || path.equals("/api/v1/login")||path.equals("/swagger-ui")||path.equals("/swagger-ui/index.html")||path.matches("/swagger-ui/.*")||path.matches(
-                "/swagger-ui/");
+        System.out.println(path);
+        return path.equals("/register") || path.equals("/login")||path.equals("/swagger-ui")||path.equals("/swagger-ui/index.html")||path.matches("/swagger-ui/.*")||path.matches(
+                "/swagger-ui/")||path.matches("/v3/api-docs/*")||path.matches("/v3/api-docs")||path.matches("/v3/api-docs/.*")||path.matches("/v3/api-docs/");
 
     }
 

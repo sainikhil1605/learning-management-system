@@ -1,4 +1,4 @@
-package com.lms.api.models;
+package com.lms.api.models.admin;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;

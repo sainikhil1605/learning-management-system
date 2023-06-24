@@ -1,6 +1,6 @@
 package com.lms.api.repositories;
 
-import com.lms.api.models.DAOUser;
+import com.lms.api.models.user.DAOUser;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

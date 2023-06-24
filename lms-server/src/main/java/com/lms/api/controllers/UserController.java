@@ -1,9 +1,7 @@
 package com.lms.api.controllers;
 
 import com.lms.api.config.JwtTokenUtil;
-import com.lms.api.models.DAOUser;
-import com.lms.api.models.JwtResponse;
-import com.lms.api.models.UserDTO;
+import com.lms.api.models.user.UserDTO;
 import com.lms.api.services.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("")
 @CrossOrigin("http://localhost:3000")
 public class UserController {
 
